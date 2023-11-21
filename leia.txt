@@ -16,3 +16,5 @@ ainda no .env, substitua:
     no BROADCAST_DRIVER, coloque "pusher"
 
 composer require pusher/pusher-php-server
+
+em config/app.php, descomente a linha com: App\Providers\BroadcastServiceProvider::class,
