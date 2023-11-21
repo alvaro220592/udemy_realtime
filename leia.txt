@@ -1,0 +1,18 @@
+Repositório do curso:
+https://github.com/JuanDMeGon/laravel-realtime-build-several-realtime-applications
+
+Mudança do Mix pro Vite:
+Just note that during the course or any other source, when you see npm run dev (with Mix), replace it with npm run build (an equivalent in Vite). And when you see npm run watch (in Mix),  use npm run dev.
+So, you will be fine by just using npm run build on Laravel Vite.
+You can read more about Laravel Vite here: https://laravel.com/docs/9.x/vite
+
+
+aula 12. Getting Ready to Use Pusher as the Realtime Service on Laravel
+criar conta no https://pusher.com/
+criar channel - https://dashboard.pusher.com/channels
+app keys em: https://dashboard.pusher.com/apps/1711655/keys
+substitua no .env as keys, pois o arquivo config/broadcasting.php pega de lá
+ainda no .env, substitua:
+    no BROADCAST_DRIVER, coloque "pusher"
+
+composer require pusher/pusher-php-server
