@@ -53,4 +53,40 @@ aula 13. Installing and Preparing Laravel Echo to Broadcast Messages
                 forceTLS: true
             });
 
+    npm install && npm run build
     npm run dev
+
+aula 15. Creating an Event to Notify Users’ Session Changes
+    criar um 'Event' pra detectar uma ação realizada. No caso é login/logout
+        php artisan make:event UserSessionChanged
+            isso cria uma pasta(se ainda não existir chamada Events em app/)
+
+        nessa classe criada, tem que colocar pra implementar o ShouldBroadcast que está importado nela
+        vá na função broadcastOn() e defina o 'channel-name'. Neste caso será 'notifications'
+        Essa função está retornando um canal privado(requer autenticação), mas existem os públicos(nao requerem autenticação') e os 'Presence Channels'(requer autenticação). Neste caso vai mudar de 'PrivateChanel' para 'Chanel'(público). Se não estiver sendo importado, importe. Nesse caso já estava; Então esse canal é um canal público chamado 'notifications'.
+        Pra fazer o broadcast, é necessário criar propriedades públicas(nesse caso serão a mensagem e o tipo(success ou danger)), já que o channel é público e será feito um get & set no constructor
+
+aula 16. Using Laravel Listeners to Broadcast Changes on Users’ Session
+    agora é hora de manipular o canal pra disparar a notificação no momento desejado(login ou logout)
+    pra isso precisa 'escutar' o evento pra fazer o broadcast
+    serão criados 2 'listeners' diferentes. Um pro logine  outro pro logout. Pra criar o listener:
+    php artisan make:listener BroadcastUserLoginNotification
+        isso cria uma pasta(se ainda não existir chamada Listeners em app/)
+
+        nessa classe, será detectada a ação de login na função handle(Object $event)
+        foi colocada como classe 'Login' dentro do parâmetro, ficando assim: public function handle(Login $event). Importação: use Illuminate\Auth\Events\Login;
+        na função, fica algo como: broadcast(new UserSessionChanged("{$event->user->name} está online", 'success')); Ou seja, chama a função broadcast indicando a classe do evento criado anteriormente e indicando a mensagem e o tipo. O nome do usuário é acessivel pois a classe Login tem esse recurso
+
+    foi feito o listener de logout também. O que mudou foi apenas a abordagem para Logout, usando o mesmo evento criado anteriormente(UserSessionChanged) e mudando a mensagem e tipo de acordo com o desejado
+
+    Agora pra mandar o laravel executar um listener de acordo com um evento específico:
+        vá até o app/Providers/EventServiceProvider.php e na propriedade private $listener, adicione os eventos seguidos por seus listeners:
+            Login::class => [ // ou seja, ao fazer login, vai chamar o Broadcast de login.
+                BroadcastUserLoginNotification::class
+            ],
+
+            Logout::class => [
+                BroadcastUserLogoutNotification::class
+            ]
+
+        Não esqueça de importar as classes. Agora o laravel sabe o que executar no login e no logout

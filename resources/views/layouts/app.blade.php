@@ -96,7 +96,11 @@
             </div>
         </nav>
 
+
         <main class="py-4 fundo_turquesa_claro" style="min-height: 100vh">
+
+            <div id="notification" class="mx-5 alert invisible"></div>
+
             @yield('content')
         </main>
     </div>
