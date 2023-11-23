@@ -94,3 +94,16 @@ aula 16. Using Laravel Listeners to Broadcast Changes on Users’ Session
 
 aula 17. Showing the Notification on Realtime Using Laravel Echo
     para fazer o frontend mostrar a notificação, é feito um processo no arquivo resources/js/app.js:
+
+
+aula 18. Broadcasting the Event Only to Authenticated Users
+    mostrar o evento só pra usuário logado
+    na classe do app/Events/UserSessionChanged.php, muda o 'Channel' da função broadcastOn() pra PrivateChannel
+    no app.js, onde está Echo.channel, muda pra Echo.private
+    npm run dev/build
+
+    foi criada uma nova rota no channels.php:
+        // Notificação apenas pra usuário logado
+        Broadcast::channel('notifications', function ($user) {
+            return $user != null;
+        });
